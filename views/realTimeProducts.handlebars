@@ -1,0 +1,30 @@
+<h1>{{title}}</h1>
+<form id="productForm">
+  <input type="text" id="name" placeholder="Nombre" required>
+  <input type="number" id="price" placeholder="Precio" required>
+  <button type="submit">Agregar</button>
+</form>
+<ul id="products"></ul>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+  const form = document.getElementById('productForm');
+  const productsList = document.getElementById('products');
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const product = {
+      name: document.getElementById('name').value,
+      price: document.getElementById('price').value
+    };
+    socket.emit('new-product', product);
+    form.reset();
+  });
+
+  socket.on('update-products', product => {
+    const li = document.createElement('li');
+    li.textContent = `${product.name} - $${product.price}`;
+    productsList.appendChild(li);
+  });
+</script>
