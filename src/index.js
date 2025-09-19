@@ -1,67 +1,83 @@
-import express from "express";
-import { createServer } from "http";
-import { Server } from "socket.io";
-import { engine } from "express-handlebars";
-import path from "path";
-import { fileURLToPath } from "url";
+import express from 'express';
+import morgan from 'morgan';
+import { createServer } from 'http';
+import { Server as SocketIOServer } from 'socket.io';
+import { engine } from 'express-handlebars';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+import productsRouter from './routes/products.router.js';
+import cartsRouter from './routes/carts.router.js';
+import { ProductManager } from './managers/ProductManager.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 const httpServer = createServer(app);
-const io = new Server(httpServer);
+const io = new SocketIOServer(httpServer);
 
+
+app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
+app.use('/static', express.static(path.join(__dirname, '../public')));
 
-// --- Handlebars config ---
-app.engine("handlebars", engine());
-app.set("view engine", "handlebars");
-app.set("views", path.join(__dirname, "../views"));
 
-// --- Productos en memoria ---
-let products = [];
+app.engine('handlebars', engine());
+app.set('view engine', 'handlebars');
+app.set('views', path.join(__dirname, 'views'));
 
-// --- Rutas ---
-app.get("/", (req, res) => {
-  res.render("home", { products });
+
+app.locals.io = io;
+
+
+app.use('/api/products', productsRouter);
+app.use('/api/carts', cartsRouter);
+
+
+app.get('/', async (req, res) => {
+  const pm = new ProductManager(path.join(__dirname, 'data', 'products.json'));
+  const products = await pm.getAll();
+  return res.render('home', { products });
 });
 
-app.get("/realtimeproducts", (req, res) => {
-  res.render("realTimeProducts", { products });
+app.get('/realtimeproducts', async (req, res) => {
+  return res.render('realTimeProducts');
 });
 
-// --- API para productos ---
-app.post("/api/products", (req, res) => {
-  const { title, price } = req.body;
-  if (!title || !price) {
-    return res.status(400).send("Faltan campos");
-  }
 
-  const newProduct = {
-    id: products.length + 1,
-    title,
-    price,
-  };
-  products.push(newProduct);
+io.on('connection', async (socket) => {
+  const pm = new ProductManager(path.join(__dirname, 'data', 'products.json'));
 
-  // Emitir a todos los clientes conectados
-  io.emit("updateProducts", products);
+  
+  socket.emit('products', await pm.getAll());
 
-  res.status(201).send(newProduct);
+  
+  socket.on('createProduct', async (payload, ack) => {
+    try {
+      const created = await pm.create(payload);
+      io.emit('products', await pm.getAll()); 
+      ack && ack({ ok: true, product: created });
+    } catch (err) {
+      ack && ack({ ok: false, error: err.message });
+    }
+  });
+
+
+  socket.on('deleteProduct', async (pid, ack) => {
+    try {
+      await pm.deleteById(pid);
+      io.emit('products', await pm.getAll()); 
+      ack && ack({ ok: true });
+    } catch (err) {
+      ack && ack({ ok: false, error: err.message });
+    }
+  });
 });
 
-app.delete("/api/products/:id", (req, res) => {
-  const { id } = req.params;
-  products = products.filter((p) => p.id != id);
-
-  io.emit("updateProducts", products);
-
-  res.status(200).send({ message: "Producto eliminado" });
+const PORT = process.env.PORT || 8080;
+httpServer.listen(PORT, () => {
+  console.log(`Server listening on http://localhost:${PORT}`);
 });
 
-// --- WebSockets ---
-io.on("connection", (socket) => {
-  conso

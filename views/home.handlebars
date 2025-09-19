@@ -1,6 +1,12 @@
-<h1>{{title}}</h1>
+
+<h1>Productos (Home)</h1>
 <ul>
   {{#each products}}
-    <li>{{this.name}} - ${{this.price}}</li>
+    <li>
+      <strong>{{this.title}}</strong> — ${{this.price}} — Stock: {{this.stock}}
+      <br/>
+      <small>ID: {{this.id}} | Código: {{this.code}}</small>
+    </li>
   {{/each}}
 </ul>
+<p><a href="/realtimeproducts">Ir a RealTimeProducts</a></p>
