@@ -1,27 +1,23 @@
 {
-  "name": "ecommerce-api-sockets",
+  "name": "entrega1-api",
   "version": "1.0.0",
-  "description": "API de productos y carritos (FS) + Handlebars + Socket.IO (Entrega 1 y 2)",
+  "description": "API con Handlebars y WebSockets",
   "type": "module",
   "main": "src/index.js",
   "scripts": {
+    "dev": "nodemon src/index.js",
     "start": "node src/index.js",
-    "dev": "nodemon --watch src --ext js,hbs,json --exec node src/index.js",
-    "lint": "eslint .",
-    "format": "prettier -w .",
-    "test": "echo \"(placeholder)\" && exit 0"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "express": "^4.19.2",
     "express-handlebars": "^8.0.3",
+    "socket.io": "^4.8.1",
     "morgan": "^1.10.0",
-    "nanoid": "^5.1.5",
-    "socket.io": "^4.8.1"
+    "nanoid": "^5.1.5"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0",
-    "eslint": "^9.9.0",
-    "eslint-config-prettier": "^9.1.0",
-    "prettier": "^3.3.3"
+    "nodemon": "^3.1.0"
   }
 }
+

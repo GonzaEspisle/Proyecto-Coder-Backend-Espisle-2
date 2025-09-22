@@ -1,24 +1,48 @@
-<h1>Real Time Products</h1>
+<h1>Productos en tiempo real</h1>
 
-<section>
-  <h2>Crear producto</h2>
-  <form id="createForm">
-    <input name="title" placeholder="title" required />
-    <input name="description" placeholder="description" required />
-    <input name="code" placeholder="code" required />
-    <input name="price" type="number" step="0.01" placeholder="price" required />
-    <input name="stock" type="number" placeholder="stock" required />
-    <input name="category" placeholder="category" required />
-    <input name="thumbnails" placeholder="thumbnails (coma)" />
-    <button type="submit">Crear</button>
-  </form>
-</section>
+<ul id="product-list">
+  {{#each products}}
+    <li data-id="{{this.id}}">{{this.title}} - ${{this.price}}</li>
+  {{/each}}
+</ul>
 
-<section>
-  <h2>Lista</h2>
-  <ul id="list"></ul>
-</section>
+<form id="product-form">
+  <input type="text" name="title" placeholder="Nombre" required />
+  <input type="number" name="price" placeholder="Precio" required />
+  <button type="submit">Agregar producto</button>
+</form>
 
 <script src="/socket.io/socket.io.js"></script>
-<script src="/static/realtime.js"></script>
+<script>
+  const socket = io();
+  const productList = document.getElementById('product-list');
+  const form = document.getElementById('product-form');
 
+  socket.on('updateProducts', (products) => {
+    productList.innerHTML = '';
+    products.forEach(p => {
+      const li = document.createElement('li');
+      li.textContent = `${p.title} - $${p.price}`;
+      productList.appendChild(li);
+    });
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData(form);
+    const payload = { title: fd.get('title'), price: fd.get('price') };
+
+    const res = await fetch('/api/products', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) {
+      alert('Error creando producto');
+    } else {
+      form.reset();
+      // No es necesario emitir por socket desde el cliente, el servidor ya emitirá
+    }
+  });
+</script>
