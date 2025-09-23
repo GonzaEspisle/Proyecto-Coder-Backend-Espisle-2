@@ -1,4 +1,3 @@
-// src/index.js
 import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
@@ -14,23 +13,28 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer);
 
-// Middlewares
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public"))); // public en src/public
+app.use(express.static(path.join(__dirname, "../public")));
 
-// Handlebars
+
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
-app.set("views", path.join(__dirname, "views")); // apunta a src/views
+app.set("views", path.join(__dirname, "views"));
 
-// Product manager
-const pm = new ProductManager(path.join(__dirname, "data", "products.json"));
 
-// carga inicial
-let products = await pm.getAll();
 
-// Vistas
+const productsFile = path.join(__dirname, "./data/products.json");
+const pm = new ProductManager(productsFile);
+
+
+let products = [];
+(async () => {
+  products = await pm.getAll();
+})();
+
+
 app.get("/", async (req, res) => {
   products = await pm.getAll();
   res.render("home", { products });
@@ -41,7 +45,7 @@ app.get("/realtimeproducts", async (req, res) => {
   res.render("realTimeProducts", { products });
 });
 
-// API: crear producto (guarda y emite)
+
 app.post("/api/products", async (req, res) => {
   try {
     const { title, price } = req.body;
@@ -49,39 +53,43 @@ app.post("/api/products", async (req, res) => {
 
     const newProduct = await pm.add({ title, price });
     products = await pm.getAll();
-    io.emit("updateProducts", products); // actualiza a todos
+
+   
+    io.emit("updateProducts", products);
+
     return res.status(201).json(newProduct);
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ error: "Error interno" });
+    res.status(500).json({ error: "Error interno" });
   }
 });
 
-// API: eliminar producto
+
 app.delete("/api/products/:id", async (req, res) => {
   try {
     const { id } = req.params;
     await pm.deleteById(id);
     products = await pm.getAll();
     io.emit("updateProducts", products);
-    return res.json({ message: "Producto eliminado" });
+    res.json({ message: "Producto eliminado" });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ error: "Error interno" });
+    res.status(500).json({ error: "Error interno" });
   }
 });
 
-// WebSocket
+
 io.on("connection", (socket) => {
   console.log("Un cliente se ha conectado");
   socket.emit("updateProducts", products);
+
   socket.on("disconnect", () => {
     console.log("Un cliente se ha desconectado");
   });
 });
 
-// Escuchar (usa httpServer)
-const PORT = process.env.PORT || 8080;
+
+const PORT = 8080;
 httpServer.listen(PORT, () => {
   console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
