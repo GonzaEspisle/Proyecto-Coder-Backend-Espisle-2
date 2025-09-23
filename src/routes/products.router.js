@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { ProductManager } from '../managers/ProductManager.js';
+import { ProductManager } from '../managers/productmanager.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

@@ -1,12 +1,11 @@
 {
-  "name": "entrega1-api",
+  "name": "Proyecto-Coder-Backend-Espisle-2",
   "version": "1.0.0",
-  "description": "API con Handlebars y WebSockets",
   "type": "module",
-  "main": "src/index.js",
+  "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "start": "node src/index.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
