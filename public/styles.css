@@ -1,4 +1,138 @@
-body { font-family: system-ui, Arial, sans-serif; margin: 2rem; }
-h1, h2 { margin: 0.2rem 0 1rem; }
-form input { margin: 0.2rem; }
-li { margin: 0.4rem 0; }
+/* public/styles.css */
+
+/* --- RESET & TIPOGRAFÍA BÁSICA --- */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    color: #007bff; /* Azul primario */
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+h3 {
+    color: #555;
+    margin-top: 25px;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* --- ESTILOS DE FORMULARIO (Filtros y Ordenamiento) --- */
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+}
+
+label {
+    font-weight: bold;
+    color: #444;
+}
+
+input[type="text"], 
+input[type="number"], 
+select {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+}
+
+input[type="text"]:focus, 
+input[type="number"]:focus, 
+select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+button[type="submit"], 
+button {
+    background-color: #28a745; /* Verde para acciones */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 14px;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+/* --- LISTADO DE PRODUCTOS --- */
+.product-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.product-list li {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    padding: 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.product-list h4 {
+    color: #007bff;
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.product-list hr {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 10px 0;
+}
+
+/* --- PAGINACIÓN --- */
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.pagination-controls a,
+.pagination-controls button {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.pagination-controls button[disabled] {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* --- Link RealTime --- */
+.link-realtime {
+    margin-top: 30px;
+    font-size: 1.1em;
+}
