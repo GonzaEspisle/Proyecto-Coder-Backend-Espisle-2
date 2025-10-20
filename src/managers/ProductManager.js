@@ -1,4 +1,3 @@
-// src/managers/ProductManager.js
 import fs from 'fs/promises';
 
 export default class ProductManager {

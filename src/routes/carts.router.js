@@ -8,10 +8,7 @@ const handleNotFoundError = (res, type, id) => {
     return res.status(404).json({ status: 'error', error: `${type} con ID ${id} no encontrado.` });
 };
 
-/**
- * POST /api/carts
- * Crea un nuevo carrito vacío.
- */
+
 router.post('/', async (req, res) => {
     try {
         const cart = await CartModel.create({}); 
@@ -21,10 +18,7 @@ router.post('/', async (req, res) => {
     }
 });
 
-/**
- * GET /api/carts/:cid
- * Muestra un carrito específico. (Usa POPULATE)
- */
+
 router.get('/:cid', async (req, res) => {
     try {
         const cart = await CartModel.findById(req.params.cid)
@@ -39,10 +33,7 @@ router.get('/:cid', async (req, res) => {
     }
 });
 
-/**
- * POST /api/carts/:cid/product/:pid
- * Agrega o incrementa un producto.
- */
+
 router.post('/:cid/product/:pid', async (req, res) => {
     const { cid, pid } = req.params;
     const qty = Number(req.body.quantity) || 1;
@@ -72,16 +63,13 @@ router.post('/:cid/product/:pid', async (req, res) => {
     }
 });
 
-/**
- * DELETE api/carts/:cid/products/:pid
- * Elimina el producto seleccionado del carrito. (Usa $pull)
- */
+
 router.delete('/:cid/products/:pid', async (req, res) => {
     const { cid, pid } = req.params;
     try {
         const updatedCart = await CartModel.findByIdAndUpdate(
             cid,
-            { $pull: { products: { product: pid } } }, // Operador $pull
+            { $pull: { products: { product: pid } } }, 
             { new: true } 
         ).populate('products.product').lean();
 
@@ -93,10 +81,7 @@ router.delete('/:cid/products/:pid', async (req, res) => {
     }
 });
 
-/**
- * PUT api/carts/:cid
- * Actualiza TODOS los productos del carrito con un nuevo array.
- */
+
 router.put('/:cid', async (req, res) => {
     const { cid } = req.params;
     const { products } = req.body; 
@@ -108,7 +93,7 @@ router.put('/:cid', async (req, res) => {
     try {
         const updatedCart = await CartModel.findByIdAndUpdate(
             cid,
-            { products: products }, // Sobreescribe el array completo
+            { products: products }, 
             { new: true, runValidators: true } 
         ).populate('products.product').lean();
 
@@ -120,10 +105,7 @@ router.put('/:cid', async (req, res) => {
     }
 });
 
-/**
- * PUT api/carts/:cid/products/:pid
- * Actualiza SÓLO la cantidad de ejemplares. (Usa $set y el operador posicional $)
- */
+
 router.put('/:cid/products/:pid', async (req, res) => {
     const { cid, pid } = req.params;
     const { quantity } = req.body;
@@ -149,10 +131,7 @@ router.put('/:cid/products/:pid', async (req, res) => {
     }
 });
 
-/**
- * DELETE api/carts/:cid
- * Elimina TODOS los productos del carrito (vaciar).
- */
+
 router.delete('/:cid', async (req, res) => {
     try {
         const updatedCart = await CartModel.findByIdAndUpdate(

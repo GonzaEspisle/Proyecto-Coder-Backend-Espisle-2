@@ -1,6 +1,4 @@
-/* public/styles.css */
 
-/* --- RESET & TIPOGRAFÍA BÁSICA --- */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f4f7f6;
@@ -11,7 +9,7 @@ body {
 }
 
 h1 {
-    color: #007bff; /* Azul primario */
+    color: #007bff; 
     border-bottom: 2px solid #007bff;
     padding-bottom: 10px;
     margin-bottom: 20px;
@@ -33,7 +31,7 @@ a:hover {
     text-decoration: underline;
 }
 
-/* --- ESTILOS DE FORMULARIO (Filtros y Ordenamiento) --- */
+
 form {
     background-color: #fff;
     padding: 20px;
@@ -68,7 +66,7 @@ select:focus {
 
 button[type="submit"], 
 button {
-    background-color: #28a745; /* Verde para acciones */
+    background-color: #28a745; 
     color: white;
     padding: 10px 15px;
     border: none;
@@ -82,7 +80,7 @@ button:hover {
     background-color: #218838;
 }
 
-/* --- LISTADO DE PRODUCTOS --- */
+
 .product-list ul {
     list-style: none;
     padding: 0;
@@ -109,7 +107,7 @@ button:hover {
     margin: 10px 0;
 }
 
-/* --- PAGINACIÓN --- */
+
 .pagination-controls {
     display: flex;
     align-items: center;
@@ -131,7 +129,7 @@ button:hover {
     cursor: not-allowed;
 }
 
-/* --- Link RealTime --- */
+
 .link-realtime {
     margin-top: 30px;
     font-size: 1.1em;

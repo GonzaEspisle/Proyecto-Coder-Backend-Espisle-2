@@ -1,18 +1,15 @@
-// src/routes/views.router.js
+
 import { Router } from "express";
 import ProductModel from "../models/Product.model.js"; 
 import { CartModel } from "../models/Cart.model.js";
 
 const router = Router();
 
-// RUTA RAÍZ: Redirige al listado de productos
+
 router.get("/", (req, res) => {
     res.redirect("/products");
 });
 
-// ----------------------------------------------------------------------------------
-// 1. VISTA DE PRODUCTOS (CON PAGINACIÓN)
-// ----------------------------------------------------------------------------------
 
 router.get("/products", async (req, res) => {
     try {
@@ -74,22 +71,18 @@ router.get("/products/:pid", async (req, res) => {
 });
 
 
-// ----------------------------------------------------------------------------------
-// 2. VISTA DE CARRITO (CON POPULATE)
-// ----------------------------------------------------------------------------------
-
 router.get("/carts/:cid", async (req, res) => {
-    const { cid } = req.params;
-    try {
-        const cart = await CartModel.findById(cid)
-            .populate('products.product') 
-            .lean();
-        
-        if (!cart) {
-            return res.status(404).render("error", { message: `Carrito con ID ${cid} no encontrado.` });
-        }
-        
-        res.render("cart", { 
+ const { cid } = req.params;
+ try {
+ const cart = await CartModel.findById(cid)
+ .populate('products.product') 
+ .lean();
+ 
+ if (!cart) {
+return res.status(404).render("error", { message: `Carrito con ID ${cid} no encontrado.` });
+ }
+
+ res.render("cart", { 
             cart,
             products: cart.products 
         });
