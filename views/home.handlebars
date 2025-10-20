@@ -1,11 +1,11 @@
 <h1>Listado de Productos</h1>
 <p>Página {{page}} de {{totalPages}}</p>
 
-{{! --- Controles de Filtro y Ordenamiento --- }}
+
 <div style="margin-bottom: 20px;">
     <h3>Filtros y Ordenamiento</h3>
     <form action="/products" method="GET">
-        <label for="query">Buscar por Categoría o Disponibilidad (true/false):</label>
+        <label for="query">Buscar por Categoría o Disponibilidad:</label>
         <input type="text" name="query" id="query" value="{{currentQuery}}">
         
         <label for="limit">Límite:</label>
@@ -13,7 +13,7 @@
         
         <label for="sort">Ordenar por Precio:</label>
         <select name="sort" id="sort">
-            {{! Uso de Helper 'eq' como bloque condicional para el atributo 'selected' }}
+            
             <option value="" {{#eq currentSort ""}}selected{{/eq}}>Sin Orden</option>
             <option value="asc" {{#eq currentSort 'asc'}}selected{{/eq}}>Ascendente (Menor a Mayor)</option>
             <option value="desc" {{#eq currentSort 'desc'}}selected{{/eq}}>Descendente (Mayor a Menor)</option>
@@ -23,10 +23,10 @@
         <a href="/products">Limpiar Filtros</a>
     </form>
 </div>
-{{! --- Fin Controles --- }}
 
 
-{{! --- Listado de Productos --- }}
+
+
 <div class="product-list">
     {{#if products}}
         <ul>
@@ -47,10 +47,10 @@
         <p>No se encontraron productos con los filtros aplicados.</p>
     {{/if}}
 </div>
-{{! --- Fin Listado --- }}
 
 
-{{! --- Paginación --- }}
+
+
 <div class="pagination-controls" style="margin-top: 20px;">
     {{#if hasPrevPage}}
         <a href="{{prevLink}}">« Anterior</a>
@@ -66,6 +66,6 @@
         <button disabled>Siguiente »</button>
     {{/if}}
 </div>
-{{! --- Fin Paginación --- }}
+
 
 <p class="link-realtime"><a href="/realtimeproducts">Ir a RealTimeProducts</a></p>

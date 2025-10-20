@@ -1,0 +1,18 @@
+
+
+<h1>Detalle del Producto</h1>
+<a href="/products">« Volver al Listado</a>
+
+<div class="product-detail" style="margin-top: 20px; border: 1px solid #ddd; padding: 20px; border-radius: 8px;">
+    <h2>{{product.title}}</h2>
+    <p><strong>ID:</strong> {{product._id}}</p>
+    <p><strong>Descripción:</strong> {{product.description}}</p>
+    <p><strong>Precio:</strong> <span style="font-size: 1.5em; color: #007bff;">${{product.price}}</span></p>
+    <p><strong>Código:</strong> {{product.code}}</p>
+    <p><strong>Categoría:</strong> {{product.category}}</p>
+    <p><strong>Stock:</strong> {{product.stock}}</p>
+    <p><strong>Estado (Status):</strong> {{#if product.status}}Disponible{{else}}No Disponible{{/if}}</p>
+
+   
+    <button onclick="addToCart('{{product._id}}')" style="margin-top: 15px;">🛒 Agregar al Carrito</button>
+</div>
