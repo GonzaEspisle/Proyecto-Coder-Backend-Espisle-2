@@ -1,0 +1,52 @@
+<h1>Detalles del Carrito (ID: {{cart._id}})</h1>
+
+{{! Verifica si hay productos en el array }}
+{{#if products}}
+    <h2>Productos en Carrito</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Cantidad</th>
+                <th>Precio Unitario</th>
+                <th>Subtotal</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each products}}
+                <tr>
+                    <td>
+                        {{! Accede a los detalles del producto populado }}
+                        <strong>{{this.product.title}}</strong>
+                        <br><small>ID: {{this.product._id}} | Código: {{this.product.code}}</small>
+                    </td>
+                    <td>{{this.quantity}}</td>
+                    <td>${{this.product.price}}</td>
+                    <td>
+                        {{! Requiere un helper 'multiply' en Handlebars para calcular el total }}
+                        ${{multiply this.product.price this.quantity}}
+                    </td>
+                    <td>
+                        {{! Botón para eliminar un producto (API: DELETE /api/carts/:cid/products/:pid) }}
+                        <button onclick="removeProduct('{{../cart._id}}', '{{this.product._id}}')" style="color: red;">❌ Eliminar</button>
+                    </td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    <hr>
+    
+    {{! Botón para vaciar el carrito completo (API: DELETE /api/carts/:cid) }}
+    <button onclick="clearCart('{{cart._id}}')" style="margin-top: 20px;">🗑️ Vaciar Carrito Completo</button>
+
+{{else}}
+    <div style="padding: 20px; border: 1px dashed #ccc;">
+        <p>El carrito está vacío. ¡Añade algunos productos!</p>
+    </div>
+{{/if}}
+
+{{! Nota: Las funciones 'removeProduct' y 'clearCart' deben ser implementadas
+en un archivo de JavaScript en tu carpeta 'public' para interactuar con los endpoints de la API.
+}}
